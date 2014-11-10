@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Constants
+JAVA_MAJOR=1
+JAVA_MINOR=6
+JAVA_64BIT=7
+APP_JAR="NearInfinity.jar"
+APP_NAME="Near Infinity"
+JAVA_PLUGIN="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/HomeX"
+VM_ARGS=""
+
+# Set the working directory
+DIR=$(cd "$(dirname "$0")"; pwd)
+
+# Error message for NO JAVA dialog
+ERROR_TITLE="Cannot launch $APP_NAME"
+ERROR_MSG="$APP_NAME requires Java version $JAVA_MAJOR.$JAVA_MINOR or later to run."
+DOWNLOAD_URL="http://www.java.com/en/download/mac_download.jsp"
+
+# Is Java installed?
+if [[ -n "$JAVA_PLUGIN" ]] && [[ -x "$JAVA_PLUGIN/bin/java" ]]; then
+	_java="$JAVA_PLUGIN/bin/java"
+elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+    _java="$JAVA_HOME/bin/java"
+elif type -p java; then
+    _java="java"
+else
+    osascript \
+	-e "set question to display dialog \"$ERROR_MSG\" with title \"$ERROR_TITLE\" buttons {\"Cancel\", \"Download\"} default button 2" \
+	-e "if button returned of question is equal to \"Download\" then open location \"$DOWNLOAD_URL\""
+	echo "$ERROR_TITLE"
+	echo "$ERROR_MSG"
+	exit 1
+fi
+
+# Java version check
+if [[ "$_java" ]]; then
+    version=$("$_java" -version 2>&1 | awk -F '"' '/version/ {print $2}')
+    if [[ "$version" < "$JAVA_MAJOR.$JAVA_MINOR" ]]; then
+        osascript \
+    	-e "set question to display dialog \"$ERROR_MSG\" with title \"$ERROR_TITLE\" buttons {\"Cancel\", \"Download\"} default button 2" \
+    	-e "if button returned of question is equal to \"Download\" then open location \"$DOWNLOAD_URL\""
+    	echo "$ERROR_TITLE"
+    	echo "$ERROR_MSG"
+    	exit 1
+    fi
+    if [[ "$version" < "$JAVA_MAJOR.$JAVA_64BIT" ]]; then
+    	VM_ARGS="-Xms512m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:NewSize=128m -XX:MaxNewSize=128m"
+    fi
+fi
+
+# Run the application
+exec "$_java" $VM_ARGS -Dapple.laf.useScreenMenuBar=true -Dcom.apple.macos.use-file-dialog-packages=true -Xdock:name="$APP_NAME" -Xdock:icon="$DIR/../Resources/application.icns" -cp ".;$DIR;" -jar "$DIR/$APP_JAR"
