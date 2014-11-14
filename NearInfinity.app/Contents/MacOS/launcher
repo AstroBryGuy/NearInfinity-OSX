@@ -20,10 +20,10 @@ DOWNLOAD_URL="http://www.java.com/en/download/mac_download.jsp"
 # Is Java installed?
 if [[ -n "$JAVA_PLUGIN" ]] && [[ -x "$JAVA_PLUGIN/bin/java" ]]; then
 	_java="$JAVA_PLUGIN/bin/java"
-elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
-    _java="$JAVA_HOME/bin/java"
 elif type -p java; then
     _java="java"
+elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+    _java="$JAVA_HOME/bin/java"
 else
     osascript \
 	-e "set question to display dialog \"$ERROR_MSG\" with title \"$ERROR_TITLE\" buttons {\"Cancel\", \"Download\"} default button 2" \
@@ -43,11 +43,11 @@ if [[ "$_java" ]]; then
     	echo "$ERROR_TITLE"
     	echo "$ERROR_MSG"
     	exit 1
-    fi
-    if [[ "$version" < "$JAVA_MAJOR.$JAVA_64BIT" ]]; then
+    elif [[ "$version" < "$JAVA_MAJOR.$JAVA_64BIT" ]]; then
     	VM_ARGS="-Xms512m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:NewSize=128m -XX:MaxNewSize=128m"
     fi
 fi
 
 # Run the application
-exec "$_java" $VM_ARGS -Dapple.laf.useScreenMenuBar=true -Dcom.apple.macos.use-file-dialog-packages=true -Xdock:name="$APP_NAME" -Xdock:icon="$DIR/../Resources/application.icns" -cp ".;$DIR;" -jar "$DIR/$APP_JAR"
+cd "$DIR/../../.."
+exec "$_java" $VM_ARGS -Dapple.laf.useScreenMenuBar=true -Dcom.apple.macos.use-file-dialog-packages=true -Xdock:name="$APP_NAME" -Xdock:icon="$DIR/../Resources/NearInfinity.icns" -cp ".;$DIR;" -jar "$DIR/$APP_JAR"
