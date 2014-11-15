@@ -6,7 +6,7 @@ JAVA_MINOR=6
 JAVA_64BIT=7
 APP_JAR="NearInfinity.jar"
 APP_NAME="Near Infinity"
-JAVA_PLUGIN="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/HomeX"
+JAVA_PLUGIN="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"
 VM_ARGS=""
 
 # Set the working directory
