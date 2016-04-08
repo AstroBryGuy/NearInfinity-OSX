@@ -2,7 +2,7 @@
 
 # Constants
 JAVA_MAJOR=1
-JAVA_MINOR=6
+JAVA_MINOR=8
 JAVA_64BIT=7
 APP_JAR="NearInfinity.jar"
 APP_NAME="Near Infinity"
