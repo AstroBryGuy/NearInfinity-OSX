@@ -13,11 +13,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>v2.0-20160407</string>
+	<string>v2.0-20160408</string>
 	<key>CFBundleSignature</key>
 	<string>xmmd</string>
 	<key>CFBundleVersion</key>
-	<string>v2.0-20160407</string>
+	<string>v2.0-20160408</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>NO</string>
 </dict>
